@@ -15,5 +15,7 @@ public class Question {
     private String title;
     @Column(name = "content")
     private String content;
+    @Column(name = "likes")
+    private int likes;
 
 }
