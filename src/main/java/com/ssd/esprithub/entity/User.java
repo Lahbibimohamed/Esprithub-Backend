@@ -2,6 +2,8 @@ package com.ssd.esprithub.entity;
 
 import lombok.Data;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -32,6 +34,24 @@ public class User {
     private  Role role;
     @Enumerated(EnumType.STRING)
     private  Niveau niveau;
+    
+    @OneToMany(mappedBy = "sender")
+    private Set<Chat> chatsender;
+    @OneToMany(mappedBy = "receiver")
+    private Set<Chat> chatreceiver;
+    
+    @OneToOne
+    private Options optionu;
+    
+    @OneToMany(mappedBy = "userbadges")
+    private Set<Badge> badges;
+    
+    @OneToMany(mappedBy = "userpoest")
+    private Set<Post> posts;
+    
+    @OneToMany(mappedBy = "userquestions")
+    private Set<Question> questions;
+    
 
 
 }
