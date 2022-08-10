@@ -2,6 +2,7 @@ package com.ssd.esprithub.service;
 
 import com.ssd.esprithub.entity.User;
 import com.ssd.esprithub.registration.token.ConfirmationToken;
+import com.ssd.esprithub.registration.token.ConfirmationTokenRepository;
 import com.ssd.esprithub.registration.token.ConfirmationTokenService;
 import com.ssd.esprithub.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
 
     private  final UserRepository userRepository;
+    private  final ConfirmationTokenRepository confirmationTokenRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
     @Override
@@ -31,9 +33,20 @@ public class UserService implements UserDetailsService {
     public String signUpUser (User user ){
         boolean userExists =userRepository.findByEmail(user.getEmail())
                 .isPresent();
+
          if  (userExists)
          {
-             throw new IllegalStateException( " email already taken") ;
+            User userEnable=userRepository.findByEmail(user.getEmail()).get() ;
+            if(userEnable.getEnabled() == true){
+
+                throw new IllegalStateException( " email already taken") ;
+            }else {
+           /*    ConfirmationToken deleteUserToken= confirmationTokenRepository.findByUser(user).get();
+                confirmationTokenRepository.delete(deleteUserToken);*/
+                userRepository.delete(userEnable);
+            }
+
+
          }
          String encodedPassword=   bCryptPasswordEncoder.encode( user.getPassword());
          user.setPassword(encodedPassword);

@@ -1,4 +1,4 @@
-package com.ssd.esprithub.registration;
+package com.ssd.esprithub.registration.email;
 
 import org.springframework.stereotype.Service;
 
