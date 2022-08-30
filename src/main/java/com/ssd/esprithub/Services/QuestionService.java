@@ -5,9 +5,12 @@ import java.util.List;
 import com.ssd.esprithub.entity.Question;
 
 
+
+
+
 public interface QuestionService {
 
-	Question addQuestion (Question q);
+	
 	List<Question> retrieveQuestions();
 
 	

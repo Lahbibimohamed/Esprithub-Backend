@@ -3,26 +3,38 @@ package com.ssd.esprithub.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssd.esprithub.Services.ResponseServiceImp;
-import com.ssd.esprithub.entity.Response;
+import com.ssd.esprithub.entity.UserQuestion;
 
+
+
+
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/response")
 public class ResponseController {
 
 	@Autowired
 	private ResponseServiceImp responseServiceImp;
 	
-	@PostMapping("/addResponse")
+	@PostMapping("/addAnswer")
 	@ResponseBody
 	public Response addResponse(@RequestBody Response response) {
+		
 		return responseServiceImp.addResponse(response);
 	}
+	
 	
 	@PutMapping("/updateResponse")
 	@ResponseBody
@@ -41,4 +53,36 @@ public class ResponseController {
 	public List<Response> getResponses(){
 		return responseServiceImp.retrieveResponses();
 	}
+	
+	@GetMapping("/QuestionAnswers")
+	@ResponseBody
+	public List<UserQuestion> getQuestionAnswers(@RequestParam("id") Long id){
+		
+		return responseServiceImp.getQuestionAnswers(id);
+	}
+	
+	@GetMapping("/QuestionAnswersNotApproved")
+	@ResponseBody
+	public List<UserQuestion> getQuestionAnswersNotApproved(@RequestParam("id") Long id){
+		
+		return responseServiceImp.getQuestionAnswersNotApproved(id);
+	}
+	
+	@PutMapping("/ApproveAnswer")
+	
+	public void ApproveAnswer(@RequestBody Response response ) {
+		responseServiceImp.ApproveAnswer(response.getIdResponse());
+	}
+	
+	
+	@DeleteMapping("/CancelAnswer")
+	public void CancelAnswer(@RequestParam("id") Long id) {
+		responseServiceImp.deleteResponse(id);
+	}
+	
+	@PutMapping("/CommentAnswer")
+	public void CommentAnswer(@RequestBody Response response ) {
+		responseServiceImp.CommentAnswer(response.getIdResponse());
+	}
+	
 }

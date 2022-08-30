@@ -1,17 +1,27 @@
 package com.ssd.esprithub.Controller;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ssd.esprithub.Services.TagService;
 import com.ssd.esprithub.entity.Tag;
+import com.ssd.esprithub.entity.UserQuestion;
+
+
+@RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/tag")
 
 public class TagController {
 
@@ -42,4 +52,27 @@ public class TagController {
 		return tagservice.retrieveTags();
 	}
 	
+	
+	@GetMapping("/addTagAndAffectQuestion")
+	public void addTagAndAffectQuestion(@RequestParam("list") String tags,@RequestParam("id") Long id) {
+		tagservice.addTagAndAffectQuestion(tags, id);
+	}
+	
+	@GetMapping("/QuestionByTag")
+	@ResponseBody
+	public List<UserQuestion> getQuestionByTag(@RequestParam("tag") String title){
+		return tagservice.getQuestionByTag(title);
+	}
+	
+	@GetMapping("/TeacherQuestionByTag")
+	@ResponseBody
+	public List<UserQuestion> getTeachersQuestionByTag(@RequestParam("tag") String title){
+		return tagservice.getTeachersQuestionsByTag(title);
+	}
+	
+	@GetMapping("/SimilarQuestionByTags")
+	@ResponseBody
+	public List<UserQuestion> getSimilarQuestionByTags(@RequestParam("tags") List<String> tags){
+		return tagservice.getSimilarQuestionByTags(tags);
+	}
 }

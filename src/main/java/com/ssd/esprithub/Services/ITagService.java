@@ -6,6 +6,10 @@ import com.ssd.esprithub.entity.Tag;
 
 
 
+
+
+
+
 public interface ITagService {
 	Tag addTag (Tag q);
 	List<Tag> retrieveTags();
