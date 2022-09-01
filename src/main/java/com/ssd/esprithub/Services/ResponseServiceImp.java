@@ -14,6 +14,13 @@ import org.springframework.stereotype.Service;
 
 import com.ssd.esprithub.Repositories.QuestionRepository;
 import com.ssd.esprithub.Repositories.UserRepository;
+import com.ssd.esprithub.entity.Question;
+import com.ssd.esprithub.entity.Response;
+import com.ssd.esprithub.entity.TypeBadge;
+import com.ssd.esprithub.entity.User;
+import com.ssd.esprithub.entity.UserQuestion;
+import com.ssd.esprithub.Repositories.ResponseRepository;
+
 
 
 
@@ -141,6 +148,7 @@ public class ResponseServiceImp implements IResponseService {
 		else 
 			return null;
 	}
+
 	
 
 }

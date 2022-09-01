@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssd.esprithub.Services.ResponseServiceImp;
+import com.ssd.esprithub.entity.Response;
 import com.ssd.esprithub.entity.UserQuestion;
 
 

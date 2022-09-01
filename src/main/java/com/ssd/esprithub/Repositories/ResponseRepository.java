@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.ssd.esprithub.entity.Response;
 
 @Repository
-public interface ReponseRepository extends CrudRepository<Response, Long> {
+public interface ResponseRepository extends CrudRepository<Response, Long> {
 
 	List<Response> findByIdUser(Long id);
 }

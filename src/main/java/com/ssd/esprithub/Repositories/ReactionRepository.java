@@ -2,7 +2,9 @@ package com.ssd.esprithub.Repositories;
 
 import org.springframework.data.repository.CrudRepository;
 
-import tn.esprithub.Entities.Reaction;
+import com.ssd.esprithub.entity.Reaction;
+
+
 
 public interface ReactionRepository extends CrudRepository<Reaction, Long> {
 
