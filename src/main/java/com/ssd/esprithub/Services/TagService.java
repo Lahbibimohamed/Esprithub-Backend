@@ -1,6 +1,8 @@
 package com.ssd.esprithub.Services;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +20,9 @@ import com.ssd.esprithub.entity.Role;
 import com.ssd.esprithub.entity.Tag;
 import com.ssd.esprithub.entity.UserQuestion;
 
+import tn.esprithub.Services.QuestionServiceImp;
+import tn.esprithub.Services.ResponseServiceImp;
+
 
 
 
@@ -28,10 +33,13 @@ public class TagService implements ITagService{
 	private TagRepository tagrepository;
 	
 	@Autowired
-	private QuestionRepository questionRepository;
+	private QuestionServiceImp questionRepository;
 	
 	@Autowired
 	private ResponseServiceImp imp;
+	
+	@Autowired
+	private ResponseServiceImp responseServiceImp; 
 	@Override
 	public Tag addTag(Tag q) {
 		Tag tag=tagrepository.findByTitle(q.getTitle());
@@ -74,7 +82,7 @@ public class TagService implements ITagService{
 		for (String string : s) {
 			tagss.add(string);
 			}
-		Question question=questionRepository.findById(id).get();
+		Question question=questionRepository.retrieveQuestion(id);
 		for (String tagg : tagss) {
 			Tag tag=tagrepository.findByTitle(tagg);
 			if(tag != null) {
@@ -98,11 +106,11 @@ public class TagService implements ITagService{
 			}
 		}
 		
-		questionRepository.save(question);
+		questionRepository.updateProduit(question);
 	}
 	
 
-	public List<UserQuestion> getQuestionByTag(String title){
+	public List<UserQuestion> getQuestionByTag(String title) throws IOException{
 		Tag tag=tagrepository.findByTitle(title);
 		List<UserQuestion> result=new ArrayList<>();
 try {
@@ -113,7 +121,7 @@ try {
 			}
 			
 			String nom=q.getUserquestions().getFirstName()+" "+q.getUserquestions().getLastName();
-			result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(), null, q.getUserquestions().getRole().toString(),imp.getQuestionAnswersNotApproved(q.getIdQuestion()).size() ));
+			result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(), null, q.getUserquestions().getRole().toString(),imp.getQuestionAnswersNotApproved(q.getIdQuestion()).size(),responseServiceImp.AffectBadge(q.getUserquestions().getId()), questionRepository.downloadImage(q.getUserquestions().getImage())));
 		}}
 catch(NullPointerException ex) {
 	
@@ -122,7 +130,7 @@ catch(NullPointerException ex) {
 		
 	}
 	
-	public List<UserQuestion> getTeachersQuestionsByTag(String title){
+	public List<UserQuestion> getTeachersQuestionsByTag(String title) throws IOException{
 		
 		Tag tag=tagrepository.findByTitle(title);
 		List<UserQuestion> result=new ArrayList<>();
@@ -135,7 +143,7 @@ try {
 			}
 			
 			String nom=q.getUserquestions().getFirstName()+" "+q.getUserquestions().getLastName();
-			result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(), null, q.getUserquestions().getRole().toString(),imp.getQuestionAnswersNotApproved(q.getIdQuestion()).size() ));
+			result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(), null, q.getUserquestions().getRole().toString(),imp.getQuestionAnswersNotApproved(q.getIdQuestion()).size(),responseServiceImp.AffectBadge(q.getUserquestions().getId()),questionRepository.downloadImage(q.getUserquestions().getImage()) ));
 			}}}
 catch(NullPointerException ex) {
 	
@@ -145,9 +153,10 @@ catch(NullPointerException ex) {
 	
 	}
 	
-	 public List<UserQuestion> getSimilarQuestionByTags(List<String> tags){
+	 public List<UserQuestion> getSimilarQuestionByTags(String tags) throws IOException{
 		 List<UserQuestion> result=new ArrayList<>();
-		 for (String string : tags) {
+		 List<String> tagss = Arrays.asList(tags.split(",", -1));
+		 for (String string : tagss) {
 			 List<UserQuestion> similar=new ArrayList<>();
 			 similar=this.getQuestionByTag(string);
 			 result.addAll(similar);

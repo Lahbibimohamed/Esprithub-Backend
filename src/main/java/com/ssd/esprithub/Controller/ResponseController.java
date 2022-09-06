@@ -1,5 +1,6 @@
 package com.ssd.esprithub.Controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,14 +58,14 @@ public class ResponseController {
 	
 	@GetMapping("/QuestionAnswers")
 	@ResponseBody
-	public List<UserQuestion> getQuestionAnswers(@RequestParam("id") Long id){
+	public List<UserQuestion> getQuestionAnswers(@RequestParam("id") Long id) throws IOException{
 		
 		return responseServiceImp.getQuestionAnswers(id);
 	}
 	
 	@GetMapping("/QuestionAnswersNotApproved")
 	@ResponseBody
-	public List<UserQuestion> getQuestionAnswersNotApproved(@RequestParam("id") Long id){
+	public List<UserQuestion> getQuestionAnswersNotApproved(@RequestParam("id") Long id) throws IOException{
 		
 		return responseServiceImp.getQuestionAnswersNotApproved(id);
 	}

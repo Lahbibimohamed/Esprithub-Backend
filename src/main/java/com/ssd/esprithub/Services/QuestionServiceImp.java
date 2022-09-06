@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,8 @@ import com.ssd.esprithub.entity.Tag;
 import com.ssd.esprithub.entity.TypeReaction;
 import com.ssd.esprithub.entity.User;
 import com.ssd.esprithub.entity.UserQuestion;
+
+import tn.esprithub.Services.ResponseServiceImp;
 
 
 
@@ -96,7 +100,7 @@ public class QuestionServiceImp implements QuestionService {
 		return questionRepository.findById(id).orElse(null);
 	}
 	
-	public List<UserQuestion> getAllUserQuestions(){
+	public List<UserQuestion> getAllUserQuestions() throws IOException{
 		List<Question> questions =this.retrieveQuestions();
 		List<UserQuestion> result=new ArrayList<>();
 	
@@ -112,13 +116,13 @@ public class QuestionServiceImp implements QuestionService {
 			
 			
 			
-			result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(),tags,q.getUserquestions().getRole().toString(),responseServiceImp.getQuestionAnswersNotApproved(q.getIdQuestion()).size()));
+			result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(),tags,q.getUserquestions().getRole().toString(),responseServiceImp.getQuestionAnswersNotApproved(q.getIdQuestion()).size(),responseServiceImp.AffectBadge(q.getUserquestions().getId()),this.downloadImage(q.getUserquestions().getImage())));
 		}
 		
 		return result;
 	}
 	
-	public UserQuestion getQuestion(Long id) {
+	public UserQuestion getQuestion(Long id) throws IOException {
 		Question question=questionRepository.findById(id).get();
 		String nom=question.getUserquestions().getFirstName()+" "+question.getUserquestions().getLastName();
 		List<String> tags=new ArrayList<>();
@@ -127,7 +131,7 @@ public class QuestionServiceImp implements QuestionService {
 			
 		}
 		
-		return new UserQuestion(question.getIdQuestion(), nom, question.getContent(), question.getDatepub(), question.getTitle(), 0, tags, question.getUserquestions().getRole().toString());
+		return new UserQuestion(question.getIdQuestion(), nom, question.getContent(), question.getDatepub(), question.getTitle(), 0, tags, question.getUserquestions().getRole().toString(),responseServiceImp.AffectBadge(question.getUserquestions().getId()),question.isClosed(),this.downloadImage(question.getUserquestions().getImage()));
 		
 	}
 	
@@ -326,7 +330,7 @@ public class QuestionServiceImp implements QuestionService {
 		 
 	 }
 	 
-	 public List<UserQuestion> getTeachersQuestion(){
+	 public List<UserQuestion> getTeachersQuestion() throws IOException{
 		 List<Question> list=new ArrayList<>(); 
 		 List<Question> questions =this.retrieveQuestions();
 			List<UserQuestion> result=new ArrayList<>();
@@ -346,12 +350,79 @@ public class QuestionServiceImp implements QuestionService {
 				
 				
 				
-				result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(),tags,q.getUserquestions().getRole().toString(),responseServiceImp.getQuestionAnswersNotApproved(q.getIdQuestion()).size()));
+				result.add(new UserQuestion(q.getIdQuestion(), nom, q.getContent(), q.getDatepub(), q.getTitle(), q.getNbresp(),tags,q.getUserquestions().getRole().toString(),responseServiceImp.getQuestionAnswersNotApproved(q.getIdQuestion()).size(),responseServiceImp.AffectBadge(q.getUserquestions().getId()),this.downloadImage(q.getUserquestions().getImage())));
 			}
 			
 			return result;
 		 
 	 }
+	 
+	 public String downloadImage( String name) throws IOException {
+		 FTPClient ftpClient = new FTPClient();
+		 String encodidImage="";
+		 byte[] data;
+		  try {
+      		
+       	   ftpClient.connect("192.168.1.19", 21);
+		         ftpClient.login("ftpuser", "ftpuser");
+           ftpClient.enterLocalPassiveMode();
+           ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+           System.out.println("probleme1");
+           // APPROACH #2: using InputStream retrieveFileStream(String)
+           String remoteFile2 = name;
+           
+           System.out.println(name);
+           InputStream inputStream = ftpClient.retrieveFileStream(remoteFile2);
+           System.out.println("probleme2");
+           ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+           System.out.println("probleme3");
+           System.out.println(inputStream);
+           data = IOUtils.toByteArray(inputStream);
+           System.out.println("probleme4");
+           /*int bytesRead = -1;
+           int nRead;
+           while (( bytesRead=inputStream.read(bytesArray,0,bytesArray.length)) != -1) {
+               //outputStream2.write(bytesArray, 0, bytesRead);
+           	buffer.write(bytesArray,0,bytesRead);
+           }*/
+
+           boolean success = ftpClient.completePendingCommand();
+           if (success) {
+               System.out.println("File #2 has been downloaded successfully.");
+           }
+          // outputStream2.close();
+           inputStream.close();
+          
+           ByteArrayResource resource = new ByteArrayResource(data);
+           System.out.println("probleme5");
+            encodidImage=Base64.getEncoder().encodeToString(data);
+           encodidImage="data:image/png;base64,"+encodidImage;
+           System.out.println("hay dataaaa=>>>>>>>  "+encodidImage);
+
+           
+
+
+       } catch (IOException ex) {
+           System.out.println("Error: " + ex.getMessage());
+           ex.printStackTrace();
+          
+       }
+		  
+		  finally {
+           try {
+               if (ftpClient.isConnected()) {
+                   ftpClient.logout();
+                   ftpClient.disconnect();
+                   
+               }
+           } catch (IOException ex) {
+               ex.printStackTrace();
+           }
+           
+           return encodidImage; 
+          
+       }
 	 
 	
 

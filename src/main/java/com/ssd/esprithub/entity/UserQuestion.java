@@ -5,6 +5,8 @@ package com.ssd.esprithub.entity;
 import java.util.Date;
 import java.util.List;
 
+
+
 public class UserQuestion {
 	private Long id;
 	private String nom;
@@ -17,10 +19,16 @@ public class UserQuestion {
 	private int nbreNotapproved;
 	private TypeBadge badge;
 	private boolean closed;
+	private String image;
 	
 	
 	
-	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public boolean isClosed() {
 		return closed;
 	}
@@ -75,7 +83,7 @@ public class UserQuestion {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public UserQuestion(Long idd,String nom, String content, Date datepub, String title, int nbranswers) {
+	public UserQuestion(Long idd,String nom, String content, Date datepub, String title, int nbranswers,String image) {
 		super();
 		this.id=idd;
 		this.nom = nom;
@@ -83,8 +91,9 @@ public class UserQuestion {
 		this.datepub = datepub;
 		this.title = title;
 		this.nbranswers = nbranswers;
+		this.image=image;
 	}
-	public UserQuestion(Long idd, String nom, String content, Date datepub, String title, int nbranswers, List<String> tags) {
+	public UserQuestion(Long idd, String nom, String content, Date datepub, String title, int nbranswers, List<String> tags,String image) {
 		super();
 		this.id=idd;
 		this.nom = nom;
@@ -94,6 +103,7 @@ public class UserQuestion {
 		this.nbranswers = nbranswers;
 		this.tags = tags;
 		this.closed=false;
+		this.image=image;
 	}
 	public String getRole() {
 		return role;
@@ -102,7 +112,7 @@ public class UserQuestion {
 		this.role = role;
 	}
 	public UserQuestion(Long idd,String nom, String content, Date datepub, String title, int nbranswers, List<String> tags,
-			String role) {
+			String role,TypeBadge badge, boolean closed,String image) {
 		super();
 		this.id=idd;
 		this.nom = nom;
@@ -112,8 +122,11 @@ public class UserQuestion {
 		this.nbranswers = nbranswers;
 		this.tags = tags;
 		this.role = role;
+		this.badge=badge;
+		this.closed=closed;
+		this.image=image;
 	}
-	public UserQuestion(Long idd,String nom, String content, Date datepub, String title, int nbranswers, String role,TypeBadge badge) {
+	public UserQuestion(Long idd,String nom, String content, Date datepub, String title, int nbranswers, String role,TypeBadge badge,String image) {
 		super();
 		this.id=idd;
 		this.nom = nom;
@@ -123,6 +136,7 @@ public class UserQuestion {
 		this.nbranswers = nbranswers;
 		this.role = role;
 		this.badge=badge;
+		this.image=image;
 	}
 	public int getNbreNotapproved() {
 		return nbreNotapproved;
@@ -131,7 +145,7 @@ public class UserQuestion {
 		this.nbreNotapproved = nbreNotapproved;
 	}
 	public UserQuestion(Long idd ,String nom, String content, Date datepub, String title, int nbranswers, List<String> tags,
-			String role, int nbreNotapproved) {
+			String role, int nbreNotapproved,TypeBadge badge,String image) {
 		super();
 		this.id=idd;
 		this.nom = nom;
@@ -142,6 +156,9 @@ public class UserQuestion {
 		this.tags = tags;
 		this.role = role;
 		this.nbreNotapproved = nbreNotapproved;
+		this.badge=badge;
+		
+		this.image=image;
 	}
 	public Long getId() {
 		return id;
@@ -149,7 +166,6 @@ public class UserQuestion {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 	
 	
 	

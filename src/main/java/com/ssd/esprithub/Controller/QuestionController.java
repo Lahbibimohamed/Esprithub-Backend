@@ -1,6 +1,7 @@
 package com.ssd.esprithub.Controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,13 +70,13 @@ public class QuestionController {
 	
 	@GetMapping("/Userquestions")
 	@ResponseBody
-	public List<UserQuestion> getAllUserQuestions(){
+	public List<UserQuestion> getAllUserQuestions() throws IOException{
 		return questionservice.getAllUserQuestions();
 	}
 	
 	@GetMapping("/Userquestion")
 	@ResponseBody
-	public UserQuestion getUserQuestion(@RequestParam("id") Long id) {
+	public UserQuestion getUserQuestion(@RequestParam("id") Long id) throws IOException {
 		return questionservice.getQuestion(id);
 	}
 	
@@ -120,11 +121,9 @@ public class QuestionController {
 	
 	@GetMapping("/TeachersQuestion")
 	@ResponseBody
-	public List<UserQuestion> getTeachersQuestions(){
+	public List<UserQuestion> getTeachersQuestions() throws IOException{
 		return questionservice.getTeachersQuestion();
 	}
-	
-	
 	
 
 }

@@ -1,6 +1,7 @@
 package com.ssd.esprithub.Controller;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,19 +61,19 @@ public class TagController {
 	
 	@GetMapping("/QuestionByTag")
 	@ResponseBody
-	public List<UserQuestion> getQuestionByTag(@RequestParam("tag") String title){
+	public List<UserQuestion> getQuestionByTag(@RequestParam("tag") String title) throws IOException{
 		return tagservice.getQuestionByTag(title);
 	}
 	
 	@GetMapping("/TeacherQuestionByTag")
 	@ResponseBody
-	public List<UserQuestion> getTeachersQuestionByTag(@RequestParam("tag") String title){
+	public List<UserQuestion> getTeachersQuestionByTag(@RequestParam("tag") String title) throws IOException{
 		return tagservice.getTeachersQuestionsByTag(title);
 	}
 	
 	@GetMapping("/SimilarQuestionByTags")
 	@ResponseBody
-	public List<UserQuestion> getSimilarQuestionByTags(@RequestParam("tags") List<String> tags){
+	public List<UserQuestion> getSimilarQuestionByTags(@RequestParam("tags") String tags) throws IOException{
 		return tagservice.getSimilarQuestionByTags(tags);
 	}
 }
