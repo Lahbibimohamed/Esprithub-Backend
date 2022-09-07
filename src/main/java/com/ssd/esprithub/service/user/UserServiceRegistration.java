@@ -1,4 +1,4 @@
-package com.ssd.esprithub.service;
+package com.ssd.esprithub.service.user;
 
 import com.ssd.esprithub.entity.User;
 import com.ssd.esprithub.registration.token.ConfirmationToken;
@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserServiceRegistration implements UserDetailsService {
 
     private  final UserRepository userRepository;
     private  final ConfirmationTokenRepository confirmationTokenRepository;
@@ -25,8 +25,12 @@ public class UserService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found "));
+        User user =  userRepository.findByEmail(email).orElse(null);
+        if(user ==null) {
+            throw new UsernameNotFoundException("User not found ");
+
+        }
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),user.getAuthorities());
     }
 
     // sign up

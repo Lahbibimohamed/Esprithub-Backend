@@ -6,10 +6,11 @@ import com.ssd.esprithub.registration.email.EmailSender;
 import com.ssd.esprithub.registration.email.EmailValidator;
 import com.ssd.esprithub.registration.token.ConfirmationToken;
 import com.ssd.esprithub.registration.token.ConfirmationTokenService;
-import com.ssd.esprithub.service.UserService;
+import com.ssd.esprithub.service.user.UserServiceRegistration;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RegistrationService {
     private  final EmailValidator emailValidator;
-    private  final UserService userService;
+    private  final UserServiceRegistration userServiceRegistration;
     private  final EmailSender emailSender;
     public final ConfirmationTokenService confirmationTokenService;
     public String register (RegistrationRequest request){
@@ -25,7 +26,7 @@ public class RegistrationService {
       if(!isValidEmail) {
           throw new IllegalStateException("email not valid");
       }
-        String token=  userService.signUpUser(
+        String token=  userServiceRegistration.signUpUser(
                 new User(
                         request.getFirstName(),
                         request.getLastName(),
@@ -42,7 +43,7 @@ public class RegistrationService {
       return  token;
     }
     @Transactional
-    public String confirmToken(String token) {
+    public  RedirectView confirmToken(String token) {
         ConfirmationToken confirmationToken = confirmationTokenService
                 .getToken(token)
                 .orElseThrow(() ->
@@ -59,9 +60,11 @@ public class RegistrationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableAppUser(
+        userServiceRegistration.enableAppUser(
                 confirmationToken.getUser().getEmail());
-        return "confirmed";
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl("http://localhost:4200/#/login");
+        return redirectView ;
     }
     private String buildEmail(String name, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
