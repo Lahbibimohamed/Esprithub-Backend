@@ -20,27 +20,8 @@ public class testcontroller {
                 "<h1>hello</h1>";
     }
 
-    @PostMapping("/uploadimage")
-    public String uploadimage (@RequestParam ("file")MultipartFile file){
-        System.out.println(file.getOriginalFilename());
-        System.out.println(file.getName());
-        System.out.println(file.getContentType());
-        System.out.println(file.getSize());
-        String Path_directory="src/main/resources/images";
-
-        return "test";
-    }
-
-    @Value("${file.upload-dir}")
-    String FILE_DIRECTORY;
-    @PostMapping("/uploadFile")
-    public String updateImage(@RequestParam("File") MultipartFile file) throws IOException{
-        File myFile = new File(FILE_DIRECTORY+file.getOriginalFilename());
-        myFile.createNewFile();
-        FileOutputStream fos =new FileOutputStream(myFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return "The File Uploaded Successfully";
-    }
 }
+
+
+
 

@@ -1,16 +1,18 @@
 package com.ssd.esprithub.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Options {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +20,14 @@ public class Options {
     private Long idOption;
 	 @Column(name = "libelle")
 	 private String libelle;
-	 
-	 @OneToOne(mappedBy = "optionu")
-	 private User useroption;
-	 
+	@Column(name = "discription")
+	private String discription;
+
+
+	@OneToMany(mappedBy = "option_id")
+	@JsonIgnore
+	private List<User> users ;
+	public  Options( Long idOption ){
+		this.idOption=idOption;
+	}
 }

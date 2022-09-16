@@ -1,13 +1,13 @@
 package com.ssd.esprithub.controller;
 
+import com.ssd.esprithub.entity.Options;
 import com.ssd.esprithub.entity.User;
 import com.ssd.esprithub.repository.UserRepository;
 import com.ssd.esprithub.service.user.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,7 +45,7 @@ public class UserController {
     public List<User> findAll() {
         return userService.findAll();
     }
-        @GetMapping("managment/getrole/{id}")
+    @GetMapping("managment/getrole/{id}")
     public String getrole(@PathVariable("id") Long id) {
         return userService.getRole(id);
     }
@@ -56,6 +56,10 @@ public class UserController {
     }
 
 
+    @GetMapping("findByToken")
+    public User findUserByToken() {
+        return userService.finduserbytoken(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
 
     @PostMapping("/insertImage/{id}")
     public String updateImage(@RequestParam("File") MultipartFile file,@PathVariable("id") Long id ) throws IOException {
@@ -69,5 +73,10 @@ public class UserController {
         userRepository.save(u);
         fos.close();
         return "The File Uploaded Successfully";
+    }
+    @PutMapping ( "changePassowrd/{id}")
+    public String changePassword(@RequestBody String password,@PathVariable("id") Long id){
+        String u = password;
+      return u;
     }
 }

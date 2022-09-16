@@ -1,5 +1,6 @@
 package com.ssd.esprithub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,18 +56,21 @@ public class User implements UserDetails {
     private Set<Chat> chatsender;
     @OneToMany(mappedBy = "receiver")
     private Set<Chat> chatreceiver;
-    
-    @OneToOne
-    private Options optionu;
-    
+
+    @ManyToOne
+    private Options option_id;
+
     @OneToMany(mappedBy = "userbadges")
     private Set<Badge> badges;
 
     @OneToMany(mappedBy = "userpoest")
     private Set<Post> posts;
-    
+
+
+
     @OneToMany(mappedBy = "userquestions")
     private Set<Question> questions;
+
 
     public User(String firstName, String lastName, String email, String password, Gender gender, String address, Long phone, Role role ) {
         this.firstName = firstName;
@@ -76,6 +81,7 @@ public class User implements UserDetails {
         this.address = address;
         this.phone = phone;
         this.role = role;
+
     }
 
     @Override

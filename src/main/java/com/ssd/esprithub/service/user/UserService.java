@@ -16,7 +16,7 @@ public interface UserService {
     User findById(Long id);
     String getRole(Long id ) ;
     User changeROle ( User user,Long id );
-    //User updatephoto(MultipartFile file , User user);
-
+    User finduserbytoken(String email);
+    String changePassword (String oldpassword ,Long id);
 
 }
