@@ -10,4 +10,6 @@ public interface OptionService {
     List<Options> findAll();
     Options findById(Long id);
     Options save (Options o);
+    Long countOptions();
+
 }

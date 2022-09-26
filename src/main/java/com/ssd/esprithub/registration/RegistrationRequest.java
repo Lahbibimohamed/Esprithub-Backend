@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -19,6 +21,8 @@ public class RegistrationRequest {
     private  final Long phone ;
     private  final  String address;
     private  final  String role;
+    private  final Date createdAt;
+
 
 
 }

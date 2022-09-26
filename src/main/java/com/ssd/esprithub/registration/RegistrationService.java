@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +36,10 @@ public class RegistrationService {
                         request.getGender(),
                         request.getAddress(),
                         request.getPhone(),
-                        Role.user
+                        Role.user,
+                        LocalDateTime.now()
+
+
                 )
         );
       String link= "http://localhost:8080/registration/confirm?token="+token;

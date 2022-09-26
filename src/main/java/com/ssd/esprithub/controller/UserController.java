@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -74,9 +75,32 @@ public class UserController {
         fos.close();
         return "The File Uploaded Successfully";
     }
-    @PutMapping ( "changePassowrd/{id}")
-    public String changePassword(@RequestBody String password,@PathVariable("id") Long id){
-        String u = password;
-      return u;
+        @PutMapping ( "changePassowrd/{id}")
+    public Map<String, String> changePassword(@RequestParam("oldpassword") String oldpassword, @RequestParam("newPassword") String newPassword , @PathVariable("id") Long id){
+        return userService.changePassword(newPassword,oldpassword,id);
+
     }
+    @GetMapping ("countUser")
+        public Long countusers (){
+        return userService.countUsers();
+    }
+    @GetMapping ("usersDay")
+    public Long getauserenabled (){
+        return userService.usersByday();
+    }
+    //get user with User role
+    @GetMapping ("getRoleUser")
+    public Long getRoleUser (){
+        return userService.listuserByrRoleUser();
+    }    //get user with Teacher role
+
+    @GetMapping ("getRoleTeacher")
+    public Long getRoleTeacher (){
+        return userService.listuserByrRoleTeacher();
+    }
+    @GetMapping ("getUserPerMonth")
+    public List getUserPerMonth (){
+        return userService.getUserPerMonth();
+    }
+
 }

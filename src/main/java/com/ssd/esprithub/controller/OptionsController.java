@@ -34,4 +34,8 @@ public class OptionsController {
     public Options saveOption(@RequestBody Options o ){
        return    optionService.save(o);
     }
+    @GetMapping("countOption")
+    public Long countOption() {
+        return optionService.countOptions();
+    }
 }

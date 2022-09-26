@@ -7,8 +7,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -46,6 +48,8 @@ public class User implements UserDetails {
     private String aboutMe;
     @Column (name="photo")
     private String image;
+    @Column(name="createdAt")
+    private LocalDateTime createdat;
     @Enumerated(EnumType.STRING)
     private  Role role;
     @Enumerated(EnumType.STRING)
@@ -72,7 +76,7 @@ public class User implements UserDetails {
     private Set<Question> questions;
 
 
-    public User(String firstName, String lastName, String email, String password, Gender gender, String address, Long phone, Role role ) {
+    public User(String firstName, String lastName, String email, String password, Gender gender, String address, Long phone, Role role,LocalDateTime createdAt ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -81,6 +85,7 @@ public class User implements UserDetails {
         this.address = address;
         this.phone = phone;
         this.role = role;
+        this.createdat=createdAt;
 
     }
 
